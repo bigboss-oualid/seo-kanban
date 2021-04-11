@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	# Prevent Indexing:  prevent entering in folders that does not contain an index file
+	Options +FollowSymLinks -Indexes
+
+	# Handle Front Controller: link all request to file public/index.php
+
+	#Revent request to folders or files
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-f
+
+	#Get every thing in link and redirect to index.php
+	RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
