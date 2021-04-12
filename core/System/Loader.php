@@ -32,7 +32,7 @@ class Loader
      *
      * @var array
      */
-    private $models = [];
+    private $daos = [];
 
     /**
      * Constructor
@@ -134,77 +134,77 @@ class Loader
     }
 
     /**
-     * Call the given model
+     * Call the given dao
      *
-     * @param string $model
+     * @param string $dao
      *
-     * @return Model
+     * @return DAO
      */
-    public function model(string $model): Model
+    public function dao(string $dao): DAO
     {
-        $model = $this->getModelPath($model);
+        $daoPath = $this->getDAOPath($dao);
 
-        if(! $this->hasModel($model)){
-            $this->addModel($model);
+        if(! $this->hasDAO($daoPath)){
+            $this->addDAO($daoPath);
         }
 
-        return $this->getModel($model);
+        return $this->getDAO($daoPath);
     }
 
     /**
-     * Determine if  the given class|model exists in the models
+     * Determine if  the given class exists in the DAOs
      *  container
      *
-     * @param  string  $model
+     * @param  string $dao
      *
      * @return boolean
      */
-    private function hasModel(string $model): bool
+    private function hasDAO(string $dao): bool
     {
-        return array_key_exists($model, $this->models);
+        return array_key_exists($dao, $this->daos);
     }
 
     /**
-     * Create new Object for the given model and store ot in the models
+     * Create new Object for the given class and store ot in daos
      * container
      *
-     * @param string $model
+     * @param string $dao
      *
      * @return void
      */
-    private function addModel(string $model): void
+    private function addDAO(string $dao): void
     {
-        $object = new $model($this->app);
+        $object = new $dao($this->app);
 
-        //App\Models\HomeModel
-        $this->models[$model] = $object;
+        //App\DAOSs\HomeDAO
+        $this->daos[$dao] = $object;
     }
 
     /**
-     * Get the given model object
+     * Get the given DAO object
      *
-     * @param  string $model
+     * @param  string $dao
      *
-     * @return null|Model
+     * @return null|DAO
      */
-    private function getModel(string $model): ?Model
+    private function getDAO(string $dao): ?DAO
     {
-        return $this->models[$model];
+        return $this->daos[$dao];
     }
 
     /**
-     * Get the full class name for the given model
+     * Get the full class name for the given dao
      *
-     * @param  string $model
+     * @param  string $dao
      *
      * @return string
      */
-    private function getModelPath(string $model): string
+    private function getDAOPath(string $dao): string
     {
-        $model .= 'Model';
+        $dao .= 'DAO';
 
-        $model  = 'App\\Model\\' . $model;
+        $daoPath  = 'App\\DAO\\' . $dao;
 
-        return str_replace('/', '\\', $model);
+        return str_replace('/', '\\', $daoPath);
     }
 } 
