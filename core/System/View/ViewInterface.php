@@ -9,19 +9,23 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-//White list Routes
-use System\Application;
+namespace System\View;
 
-$app =  Application::getInstance();
+interface ViewInterface
+{
+    /**
+     * Generate the output of the view path and get it
+     *
+     * @return string
+     */
+    public function getOutput(): string;
 
-//Share Homepage layout
-$app->share('frontendLayout', function ($app) {
-    return $app->load->controller('Frontend/Common/Layout');
-});
+    /**
+     * convert the "System\View\View" object to string in printing
+     * i.e echo $object
+     *
+     * @return
+     */
+    public function __toString(): string;
 
-$routes = $parameter = $app->file->call('config/routes.php');
-
-// Add Routes
-foreach($routes as $controller => $url){
-    $app->route->add($url, $controller);
 }

@@ -1,0 +1,47 @@
+/*
+ * Copyright (c) 2021. Boulatar Oualid - All Rights Reserved
+ *  You may use, distribute and modify this code under the
+ *  terms of the LGP license, which unfortunately won't be
+ *  written for another century.
+ *
+ *  You should have received a copy of the LGP license with
+ *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
+ */
+
+body {
+    background: aqua;
+}
+
+/* keep footer at the bottom of the page */
+*{
+    box-sizing: border-box;
+}
+*:before,
+*:after{
+    box-sizing: border-box;
+}
+body{
+    height: 100%;
+    position: relative;
+}
+.main-container {
+    display: block;
+    min-height: 90vh; /* will cover only 90% of viewport 10% for bootstrap navbar */
+    overflow: hidden;
+    position: relative;
+}
+footer{
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+hr {
+    width: 50%;
+}
+/**** end keep footer at the bottom ****/
+
+/**** Responsive ****/
+@media screen and (max-width: 767px) {
+
+}
+/**** end Responsive ****/

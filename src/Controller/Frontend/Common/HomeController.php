@@ -9,19 +9,21 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-//White list Routes
-use System\Application;
+namespace App\Controller\Frontend\Common;
 
-$app =  Application::getInstance();
+use System\Controller;
 
-//Share Homepage layout
-$app->share('frontendLayout', function ($app) {
-    return $app->load->controller('Frontend/Common/Layout');
-});
+class HomeController extends Controller
+{
+     /**
+     * Display Home Page
+     *
+     * @return mixed
+     */
+    public function index()
+    {
+        $view = $this->view->render('frontend/home');
 
-$routes = $parameter = $app->file->call('config/routes.php');
-
-// Add Routes
-foreach($routes as $controller => $url){
-    $app->route->add($url, $controller);
+        return $this->blogLayout->render($view);
+    }
 }
