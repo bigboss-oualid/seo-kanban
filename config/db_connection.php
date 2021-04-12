@@ -9,19 +9,10 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-//White list Routes
-use System\Application;
+return [
+    'server'   =>  'localhost',
+    'dbName'   =>  'seo-kanban',
+    'user'   =>  'root',
+    'pass'   =>  '',
+];
 
-$app =  Application::getInstance();
-
-//Share Homepage layout
-$app->share('frontendLayout', function ($app) {
-    return $app->load->controller('Frontend/Common/Layout');
-});
-
-$routes = $parameter = $app->file->call('config/routes.php');
-
-// Add Routes
-foreach($routes as $controller => $url){
-    $app->route->add($url, $controller);
-}

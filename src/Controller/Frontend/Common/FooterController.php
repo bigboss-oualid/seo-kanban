@@ -9,19 +9,19 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-//White list Routes
-use System\Application;
+namespace App\Controller\Frontend\Common;
 
-$app =  Application::getInstance();
+use System\Controller;
 
-//Share Homepage layout
-$app->share('frontendLayout', function ($app) {
-    return $app->load->controller('Frontend/Common/Layout');
-});
-
-$routes = $parameter = $app->file->call('config/routes.php');
-
-// Add Routes
-foreach($routes as $controller => $url){
-    $app->route->add($url, $controller);
+class FooterController extends Controller
+{
+    /**
+     * return footer for index page
+     *
+     *  @return string
+     */
+    public function index(): string
+    {
+        return $this->view->render('frontend/common/footer')->getOutput();
+    }
 }
