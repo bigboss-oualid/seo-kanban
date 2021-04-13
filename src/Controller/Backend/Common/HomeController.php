@@ -9,19 +9,21 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Frontend\Common;
+namespace App\Controller\Backend\Common;
 
 use System\Controller;
 
-class FooterController extends Controller
+class HomeController extends Controller
 {
-    /**
-     * return footer for index page
+     /**
+     * Display Home Page
      *
-     *  @return string
+     * @return mixed
      */
-    public function index(): string
+    public function index()
     {
-        return $this->view->render('frontend/common/footer')->getOutput();
+        $view = $this->view->render('backend/home');
+
+        return $this->backendLayout->render($view);
     }
 }

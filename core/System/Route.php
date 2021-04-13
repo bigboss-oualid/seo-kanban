@@ -85,7 +85,6 @@ class Route
             'action'     => $this->getAction($action),
             'method'     => strtoupper($requestMethod),
         ];
-
         $this->routes[] = $route;
     }
 

@@ -15,13 +15,17 @@ use System\Application;
 $app =  Application::getInstance();
 
 //Share Homepage layout
-$app->share('frontendLayout', function ($app) {
+/*$app->share('frontendLayout', function ($app) {
     return $app->load->controller('Frontend/Common/Layout');
+});*/
+
+$app->share('backendLayout', function ($app) {
+    return $app->load->controller('Backend/Common/Layout');
 });
 
 $routes = $parameter = $app->file->call('config/routes.php');
 
 // Add Routes
-foreach($routes as $controller => $url){
-    $app->route->add($url, $controller);
+foreach($routes as $route){
+    $app->route->add($route['url'], $route['controller'], $route['method']);
 }

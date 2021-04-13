@@ -10,5 +10,10 @@
  */
 
 return [
-        'Frontend/Home'   =>  '/',
+        ['url' => '/','controller' => 'Backend/Home', 'method' => 'GET' ],
+        ['url' => '/boards','controller' => 'Backend/Board', 'method' => 'GET' ],
+        ['url' => '/board/:text/:id','controller' => 'Backend/Board@show', 'method' => 'GET' ],
+        ['url' => '/board/add', 'controller' => 'Backend/Board@add', 'method' => 'POST' ],
+        ['url' => '/board/edit/:id', 'controller' => 'Backend/Board@edit', 'method' => 'POST' ],
+        ['url' => '/board/delete/:id', 'controller' => 'Backend/Board@delete', 'method' => 'POST' ],
     ];

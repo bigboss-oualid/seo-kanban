@@ -9,7 +9,7 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Frontend\Common;
+namespace App\Controller\Backend\Common;
 
 use System\Controller;
 use System\View\ViewInterface;
@@ -35,9 +35,9 @@ class LayoutController extends Controller
         $sections = ['header', 'footer'];
 
         foreach ($sections as $section) {
-            $data[$section] = in_array($section, $this->disabledSections) ? '' : $this->load->controller('Frontend/Common/' . ucfirst($section))->index();
+            $data[$section] = in_array($section, $this->disabledSections) ? '' : $this->load->controller('Backend/Common/' . ucfirst($section))->index();
         }
-        return $this->view->render('frontend/common/layout', $data);
+        return $this->view->render('backend/common/layout', $data);
     }
 
     /**

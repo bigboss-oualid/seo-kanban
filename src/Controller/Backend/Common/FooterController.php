@@ -9,21 +9,19 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Frontend\Common;
+namespace App\Controller\Backend\Common;
 
 use System\Controller;
 
-class HeaderController extends Controller
+class FooterController extends Controller
 {
     /**
-     * Return header for index page
+     * return footer for index page
      *
      *  @return string
      */
     public function index(): string
     {
-        $data['title'] = $this->html->title();
-
-        return $this->view->render('frontend/common/header', $data)->getOutput();
+        return $this->view->render('backend/common/footer')->getOutput();
     }
 }

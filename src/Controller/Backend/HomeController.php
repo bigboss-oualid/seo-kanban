@@ -9,7 +9,7 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Frontend;
+namespace App\Controller\Backend;
 
 use System\Controller;
 
@@ -22,11 +22,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $this->frontendLayout->setTitle('Homepage');
+        $this->backendLayout->setTitle('Homepage');
         $data['titlePage'] = 'Homepage Kanban Application';
 
-        $view = $this->view->render('frontend/home', $data);
+        $view = $this->view->render('backend/home', $data);
 
-        return $this->frontendLayout->render($view)->getOutput();
+        return $this->backendLayout->render($view)->getOutput();
     }
 }

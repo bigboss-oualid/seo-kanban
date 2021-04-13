@@ -42,7 +42,8 @@ class Request
         if(strpos($requestUri, '?') !== false) {
             list($requestUri) = explode('?', $requestUri);
         }
-        $this->url = "/". rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
+        $this->url = rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
+        //$this->url = "/". rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
         if (! $this->url) {
             $this->url = '/';
         }

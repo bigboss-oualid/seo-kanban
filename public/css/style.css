@@ -45,3 +45,204 @@ hr {
 
 }
 /**** end Responsive ****/
+
+
+/*******************************************
+/*******************************************
+BOARDS
+/*******************************************
+*******************************************/
+
+
+.board-container {
+    background-color: #dfe3e6;
+    color: black;
+    margin: 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.board-container a {
+    color: black;
+}
+
+.board-container a:hover {
+    color: gray;
+    text-decoration: underline;
+}
+
+
+.board-link-container {
+    padding: 15px 7px 15px 25px;
+}
+
+.board-container .dropdown {
+    visibility: hidden;
+}
+
+.board-container:hover .dropdown {
+    visibility: visible;
+}
+
+.board-form {
+    padding-top: 10px;
+}
+
+.board-input {
+    font-size: 14px;
+}
+
+
+/*******************************************
+/*******************************************
+BOARD
+/*******************************************
+*******************************************/
+
+.list {
+    width: 300px;
+    background-color: #dfe3e6;
+}
+
+.list-title {
+    width: 100%;
+    padding: 5px;
+    background-color: transparent;
+    border: 0;
+}
+
+.list-title:focus {
+    background-color: white;
+}
+
+
+.list-add-another {
+    width: 300px;
+}
+
+.mod-card-title {
+    width: 100%;
+    padding: 5px;
+    background-color: transparent;
+    border: 0;
+    font-size: 22px;
+}
+
+.h5-mod {
+    padding: 5px;
+}
+
+.mod-textarea {
+    background-color: transparent;
+
+}
+
+
+.card-add-textarea {
+    width: 100%;
+    padding: 5px;
+    border: 0;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    resize: none;
+}
+
+.hide {
+    display: none !important;
+}
+
+
+._card {
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+    box-shadow: 1px 1px darkgray;
+}
+
+
+._card .dropdown {
+    visibility: hidden;
+}
+
+._card:hover .dropdown {
+    visibility: visible;
+}
+
+
+.mod-title {
+    width: 100%;
+}
+
+
+.width-100 {
+    width: 100% !important;
+}
+
+.white-background {
+    background-color: white;
+}
+
+.mod-h5 {
+    font-weight: bold;
+}
+
+
+
+/*******************************************
+MODAL CHECKLIST
+*******************************************/
+
+.mod-checklist-item-control {
+    display: none;
+}
+
+.mod-checklist-item:hover .mod-checklist-item-control {
+    display: inline-block;
+}
+
+
+
+
+/*******************************************
+MODAL COMMENTS
+*******************************************/
+
+.mod-comment {
+    border-bottom: 1px solid lightgray;
+}
+
+.mod-comment-count {
+    font-weight: bold;
+    color: gray;
+}
+
+.mod-comment-control {
+    color: darkgray !important;
+    text-decoration: underline !important;
+    font-size: 14px;
+    margin-left: 12px;
+}
+
+.mod-comment-control:hover {
+    color: darkgray !important;
+    text-decoration: none !important;
+}
+
+.mod-comment-text {
+    padding: 5px;
+    border: 1px solid lightgray;
+}
+
+
+/*******************************************
+ERRORS
+*******************************************/
+
+.err-msg-text {
+    color: red;
+}
+
+.error-field {
+    border: 1px solid red !important;
+}

@@ -25,14 +25,14 @@ class Html
      *
      * @var string|null
      */
-    private ?string $title;
+    private ?string $title = '';
 
     /**
      * Html Description
      *
      * @var string|null
      */
-    private ?string $description;
+    private ?string $description = '';
 
     /**
      * Html Keywords
@@ -66,7 +66,7 @@ class Html
     /**
      * Get Title
      *
-     * @return string|null Title
+     * @return string|null
      */
     public function title(): ?string
     {

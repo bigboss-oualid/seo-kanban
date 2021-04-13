@@ -9,21 +9,24 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Frontend\Common;
+namespace System;
 
-use System\Controller;
 
-class HomeController extends Controller
+Abstract class Model
 {
-     /**
-     * Display Home Page
-     *
-     * @return mixed
-     */
-    public function index()
+    public function __construct(array $data)
     {
-        $view = $this->view->render('frontend/home');
+        $this->hydrate($data);
+    }
 
-        return $this->blogLayout->render($view);
+    private function hydrate(array $data): void
+    {
+        foreach ($data as $key => $value) {
+            $method = 'set'.str_replace('_','',ucwords($key,'_'));
+
+            if (method_exists($this, $method)) {
+                $this->$method($value);
+            }
+        }
     }
 }

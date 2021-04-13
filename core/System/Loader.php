@@ -176,7 +176,7 @@ class Loader
     {
         $object = new $dao($this->app);
 
-        //App\DAOSs\HomeDAO
+        //App\DAO\BoardDAO
         $this->daos[$dao] = $object;
     }
 
