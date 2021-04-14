@@ -47,7 +47,7 @@ boardAddbtn.addEventListener('click', function(e) {
             var html = `
                 <div class="board-container d-inline-flex" id="board-container--${boardID}">
                     <div class="board-link-container">
-                        <a href="${g.SROOT}boards/board/${boardID}">
+                        <a href="${g.SROOT}boards/${data.slug}/${boardID}">
                             <h4 class="board-name" id="board-name--${boardID}">${boardName}</h4>
                         </a>
                     </div>

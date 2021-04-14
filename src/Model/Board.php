@@ -30,10 +30,13 @@ class Board extends Model
 
     /**
      * @param string $name
+     *
+     * @return  self
      */
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -46,10 +49,13 @@ class Board extends Model
 
     /**
      * @param int $userId
+     *
+     * @return  self
      */
-    public function setUserId(int $userId): void
+    public function setUserId(int $userId): self
     {
         $this->userId = $userId;
+        return $this;
     }
 
     /**
@@ -62,9 +68,12 @@ class Board extends Model
 
     /**
      * @param int $id
+     *
+     * @return  self
      */
-    public function setId(int $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+        return $this;
     }
 }

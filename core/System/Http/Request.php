@@ -64,7 +64,7 @@ class Request
     }
 
     /**
-     * Get value from _POST by the given parameter
+     * Get value from $_POST by the given parameter
      *
      * @param  string $parameter
      * @param  mixed  $default
@@ -73,7 +73,7 @@ class Request
      */
     public function post(string $parameter, $default = null)
     {
-        // just remove any white space if there is a value
+        //Remove any white space from inputs
         $value = array_get($_POST, $parameter, $default);
 
         if (is_array($value)) {

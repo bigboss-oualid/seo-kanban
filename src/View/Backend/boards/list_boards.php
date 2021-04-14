@@ -8,7 +8,6 @@
         </div>
     </div>
 
-
     <div class="row">
         <div class="col-12">
             <!-- add board -->
@@ -26,7 +25,7 @@
                 <?php foreach ($boards as $board): ?>
                     <div class="board-container d-inline-flex" id="board-container--<?=$board->getId()?>">
                         <div class="board-link-container">
-                            <a href="<?= urlHtml('/board/'.seo($board->getName()).'/'.$board->getId()); ?>" id="board-link--<?=$board->getId()?>">
+                            <a href="<?= urlHtml('/boards/'.seo($board->getName()).'/'.$board->getId()); ?>" id="board-link--<?=$board->getId()?>">
                                 <h4 class="board-name" id="board-name--<?=$board->getId()?>"><?=$board->getName()?></h4>
                             </a>
                         </div>
@@ -46,10 +45,11 @@
     </div>
 </div>
 
+<script type="text/javascript" src="<?= assets('js/boards.js')?>" defer></script>
 <script>
     var g = {
         SROOT: "<?=urlHtml('/')?>",
-        boardsModel: "board",
+        boardsModel: "boards",
     };
 </script>
 

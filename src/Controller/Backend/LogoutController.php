@@ -9,23 +9,23 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Backend\Common;
+namespace App\Controller\Backend;
 
 use System\Controller;
 
-class HeaderController extends Controller
+class LogoutController extends Controller
 {
     /**
-     * Return header for index page
+     * log the user out
      *
-     *  @return string
+     * @return mixed
      */
-    public function index(): string
+    public function index()
     {
-        $data['title'] = $this->html->title();
+        $this->session->destroy();
+        $this->cookie->destroy();
 
-        $data['user'] = $this->load->dao('Login')->user();
-
-        return $this->view->render('backend/common/header', $data);
+        return $this->url->redirectTo('/login');
     }
+
 }

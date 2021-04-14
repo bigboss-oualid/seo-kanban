@@ -22,6 +22,7 @@ class FooterController extends Controller
      */
     public function index(): string
     {
-        return $this->view->render('backend/common/footer')->getOutput();
+        $data['user'] = $this->load->dao('Login')->user();
+        return $this->view->render('backend/common/footer', $data);
     }
 }

@@ -10,10 +10,23 @@
  */
 
 return [
-        ['url' => '/','controller' => 'Backend/Home', 'method' => 'GET' ],
-        ['url' => '/boards','controller' => 'Backend/Board', 'method' => 'GET' ],
-        ['url' => '/board/:text/:id','controller' => 'Backend/Board@show', 'method' => 'GET' ],
-        ['url' => '/board/add', 'controller' => 'Backend/Board@add', 'method' => 'POST' ],
-        ['url' => '/board/edit/:id', 'controller' => 'Backend/Board@edit', 'method' => 'POST' ],
-        ['url' => '/board/delete/:id', 'controller' => 'Backend/Board@delete', 'method' => 'POST' ],
+        ['url' => '/', 'controller' => 'Backend/Home', 'method' => 'GET'],
+
+        ['url' => '/boards', 'controller' => 'Backend/Board', 'method' => 'GET'],
+        ['url' => '/boards/:text/:id', 'controller' => 'Backend/Board@show', 'method' => 'GET'],
+        ['url' => '/boards/add', 'controller' => 'Backend/Board@add', 'method' => 'POST'],
+        ['url' => '/boards/edit/:id', 'controller' => 'Backend/Board@edit', 'method' => 'POST'],
+        ['url' => '/boards/delete/:id', 'controller' => 'Backend/Board@delete', 'method' => 'POST'],
+
+        //register
+        ['url' => '/register', 'controller' => 'Backend/Register', 'method' => 'GET'],
+        ['url' => '/register/submit', 'controller' => 'Backend/Register@submit', 'method' => 'POST' ],
+
+        ['url' => '/login', 'controller' => 'Backend/Login', 'method' => 'GET' ],
+        ['url' => '/login/submit', 'controller' => 'Backend/Login@submit', 'method' => 'POST' ],
+        ['url' => '/logout', 'controller' => 'Backend/logout', 'method' => 'GET' ],
+
+
+        ['url' => '/404', 'controller' => 'NotFound', 'method' => 'GET' ],
+
     ];

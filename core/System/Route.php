@@ -39,7 +39,7 @@ class Route
      *
      * @var string|null
      */
-    private ?string $notFound;
+    private ?string $notFound = '/404';
 
     /**
      *Calls Container

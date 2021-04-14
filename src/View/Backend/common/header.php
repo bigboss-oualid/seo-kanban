@@ -35,7 +35,6 @@
     <script type="text/javascript" src="<?= assets('js/bootstrap.min.js')?>" defer></script>
     <script type="text/javascript" src="<?= assets('js/mdb.min.js')?>" defer></script>
     <script type="text/javascript" src="<?= assets('js/ajax.js')?>" defer></script>
-    <script type="text/javascript" src="<?= assets('js/boards.js')?>" defer></script>
 
     <title><?= $title; ?></title>
     <link rel="shortcut icon" type="image/x-icon" href="<?= assets('img/favicon.png');?>">
@@ -56,17 +55,26 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item active">
-                            <a class="nav-link" href="<?= urlHtml('/'); ?>">Home <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="<?= urlHtml('/'); ?>">Home<span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Boards</a>
+                            <a class="nav-link" href="<?=urlHtml('/boards')?>">Boards</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">login</a>
+                        <li class="nav-item float-right">
+                            <a class="nav-link" href="<?=urlHtml('/logout')?>">Logout</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Logout</a>
-                        </li>
+
+                        <?php if($user) { ?>
+                        <?php } else { ?>
+                            <li class="nav-item float-right">
+                                <a class="nav-link" href="<?=urlHtml('/register')?>">sign up</a>
+                            </li>
+                            <li class="nav-item float-right">
+                                <a class="nav-link" href="<?=urlHtml('/login')?>">sign in</a>
+                            </li>
+                        <?php } ?>
+
+
                     </ul>
                 </div>
             </div>

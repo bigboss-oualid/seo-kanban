@@ -16,7 +16,7 @@ use System\Controller;
 class BoardController extends Controller
 {
     /**
-     * Display single page Page
+     * Display single Page
      *
      * @return mixed
      */
@@ -24,10 +24,6 @@ class BoardController extends Controller
     {
         $this->backendLayout->setTitle('Board list ');
         $boards = $this->load->dao('Board')->all();
-
-        if (! $boards) {
-            return $this->url->redirectTo('/404');
-        }
 
         $data['boards'] = $boards;
         $view = $this->view->render('backend/boards/list_boards', $data);

@@ -14,10 +14,15 @@ use System\Application;
 
 $app =  Application::getInstance();
 
-//Share Homepage layout
-/*$app->share('frontendLayout', function ($app) {
-    return $app->load->controller('Frontend/Common/Layout');
-});*/
+
+$app->share('user', function ($app) {
+    $loginDao = $app->load->dao('Login');
+
+    $loginDao->isLogged();
+    $user = $loginDao->user();
+
+    return $user;
+});
 
 $app->share('backendLayout', function ($app) {
     return $app->load->controller('Backend/Common/Layout');

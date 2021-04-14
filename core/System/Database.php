@@ -183,9 +183,9 @@ class Database
      *
      * @param string $table
      *
-     * @return  array|null
+     * @return  array|bool
      */
-    public function fetch(string $table = null): ?array
+    public function fetch(string $table = null)
     {
         if($table) {
             $this->table($table);
