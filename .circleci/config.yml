@@ -26,7 +26,7 @@ jobs:
             sudo composer self-update --2
             composer install -n --prefer-dist
             # Force pulling Simple PHPUnit dependencies to be able to cache them as well
-            ./vendor/bin/simple-phpunit --version
+            ./vendor/bin/phpunit --version
       - save_cache:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
@@ -34,7 +34,7 @@ jobs:
       - run:
           name: "Run PHPUnit tests"
           command: |
-            sudo vendor/bin/phpunit
+            sudo vendor/bin/phpunit tests
   production_deploy:
     working_directory: ~/kanban
     docker:
@@ -92,7 +92,13 @@ workflows:
   version: 2
   deploy:
     jobs:
+      - build_test:
+          filters:
+            branches:
+              only: ci/cd
       - production_deploy:
+          requires:
+            - build_test
           filters:
             branches:
               only: ci/cd
