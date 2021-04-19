@@ -13,6 +13,8 @@ use System\Application;
 
 $app =  Application::getInstance();
 
+$routes = $parameter = $app->file->call('config/routes.php');
+
 // Share user if is logged
 $app->share('user', function ($app) {
     $loginDao = $app->load->dao('Login');
@@ -23,7 +25,7 @@ $app->share('user', function ($app) {
 
 $user = $app->user;
 
-// if user logged make backend free to be used
+// if user is logged in make backend free to be used
 if(isset($user)){
     // TODO: make road access more stringent
     /*if (strpos($app->request->url(), '/boards') === 0) {
@@ -35,6 +37,10 @@ if(isset($user)){
     $app->share('backendLayout', function ($app) {
         return $app->load->controller('Backend/Common/Layout');
     });
+    // Add Backend Routes
+    foreach($routes['backend'] as $route){
+        $app->route->add($route['url'], $route['controller'], $route['method']);
+    }
 }
 
 $app->share('frontendLayout', function ($app) {
@@ -42,9 +48,7 @@ $app->share('frontendLayout', function ($app) {
 });
 
 
-$routes = $parameter = $app->file->call('config/routes.php');
-
-// Add Routes
-foreach($routes as $route){
+// Add Frontend Routes
+foreach($routes['frontend'] as $route){
     $app->route->add($route['url'], $route['controller'], $route['method']);
 }
