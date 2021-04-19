@@ -11,12 +11,9 @@ jobs:
       - run:
           name: "Install apt"
           command: sudo apt update && sudo apt-get install -y rsync xsltproc
-      - add_ssh_keys:
-          fingerprints:
-            - "f9:e7:24:b6:d5:7d:0c:8a:05:61:6a:f7:43:c1:96:72"
-      - run:
-          name: "Create Environment file"
-          command: mv .env.test .env
+      #- run:
+          #name: "Create Environment file"
+          #command: mv .env.test .env
 
       # Download and cache composer dependencies
       - restore_cache:
@@ -34,6 +31,10 @@ jobs:
           key: composer-v1-{{ checksum "composer.lock" }}
           paths:
             - ./vendor
+      - run:
+          name: "Run PHPUnit tests"
+          command: |
+            sudo vendor/bin/phpunit
   production_deploy:
     working_directory: ~/kanban
     docker:
@@ -42,7 +43,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "f9:e7:24:b6:d5:7d:0c:8a:05:61:6a:f7:43:c1:96:72"
+            - "81:b5:40:3b:41:b2:df:e4:d5:4e:6f:d3:46:a3:16:ec"
       - run:
           name:  "Install apt"
           command: sudo apt update && sudo apt-get install -y rsync
@@ -69,13 +70,13 @@ jobs:
           name: "Add Production host to VM"
           command: ssh-keyscan -H $PRODUCTION_SERVER_IP >> ~/.ssh/known_hosts
       # Use Zero downtime deployment (switch an old folder with the current app version before posting code)
-      #- run:
-          #name: "Pre-deploy"
-          #command: |
+      - run:
+          name: "Pre-deploy"
+          command: |
             #Save server-path env. variable in new file & export to to server
-            #echo PRODUCTION_SERVER_PATH=$PRODUCTION_SERVER_PATH > ~/.server-path.txt && chmod -R 700 ~/.server-path.txt
-            #rsync -vzcSLhp ~/.server-path.txt $SERVER_USER@$PRODUCTION_SERVER_IP:~/
-            #ssh -t $SERVER_USER@$PRODUCTION_SERVER_IP < bin/deploy/pre_deploy.sh
+            echo PRODUCTION_SERVER_PATH=$PRODUCTION_SERVER_PATH > ~/.server-path.txt && chmod -R 700 ~/.server-path.txt
+            rsync -vzcSLhp ~/.server-path.txt $SERVER_USER@$PRODUCTION_SERVER_IP:~/
+            ssh -t $SERVER_USER@$PRODUCTION_SERVER_IP < bin/deploy/pre_deploy.sh
       - run:
           name: "Deploy code"
           command: rsync -vzcrSLhp --exclude '.circleci' --exclude '.git' --exclude '.phpunit.result.cache' --exclude '*test*' --delete ~/kanban/ $SERVER_USER@$PRODUCTION_SERVER_IP:$PRODUCTION_SERVER_PATH/current
