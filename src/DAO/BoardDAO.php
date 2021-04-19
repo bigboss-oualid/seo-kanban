@@ -11,10 +11,31 @@
 
 namespace App\DAO;
 
+use App\Model\Board;
 use System\DAO;
+use System\Database;
 
 class BoardDAO extends DAO
 {
+    /**
+     * Get board for logged user
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getBoardsForUser(int $userId): array
+    {
+        $results = $this->where('user_id = ?', $userId)->fetchAll($this->table);
+        $boards = [];
+
+        foreach ($results as $board){
+            $boards[] = new Board($board);
+        }
+
+        return $boards;
+    }
+
     /**
      * Create new board
      *
@@ -23,7 +44,7 @@ class BoardDAO extends DAO
     public function create(): array
     {
         $data['name'] = ucfirst($this->request->post('name'));
-        $data['user_id'] =  $this->request->post('user_id');
+        $data['user_id'] =  $this->user->getId();;
         $data['slug'] =  seo( $data['name']);
 
         $result = $this->data('name',  $data['name'])

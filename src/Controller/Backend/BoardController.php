@@ -11,6 +11,7 @@
 
 namespace App\Controller\Backend;
 
+use App\Model\User;
 use System\Controller;
 
 class BoardController extends Controller
@@ -22,8 +23,16 @@ class BoardController extends Controller
      */
     public function index()
     {
-        $this->backendLayout->setTitle('Board list ');
-        $boards = $this->load->dao('Board')->all();
+        $this->backendLayout->setTitle('Board list');
+        $user = $this->user;
+
+        if ($user->getUserRoleId() === User::ROLE_ADMIN) {
+            $boards = $this->load->dao('Board')->all();
+        } elseif($user->getUserRoleId() === User::ROLE_SUPERUSER){
+            $boards = $this->load->dao('Board')->getBoardsForUser($user->getId());
+        } else {
+            $this->url->redirectTo('/403');
+        }
 
         $data['boards'] = $boards;
         $view = $this->view->render('backend/boards/list_boards', $data);
@@ -39,14 +48,16 @@ class BoardController extends Controller
      *
      * @return mixed
      */
-    public function show(string $name, int $id)
+    public function show(string $boardName, int $boardId)
     {
-        $this->backendLayout->setTitle('Board: '. $name);
+        $this->checkBoardAccess($boardId);
 
-        $board = $this->load->dao('Board')->get($id);
-        if (!$board) {return $this->url->redirectTo('/404');}
-        $this->html->setTitle($board->getName());
-        $data['board'] = $board;
+        $this->backendLayout->setTitle('Board: '. $boardName);
+        $this->html->setTitle($boardName);
+        $columns = $this->load->dao('ColumnBoard')->getAllColumnsBoardWithCard($boardId);
+        $data['columns'] = $columns;
+        $data['boardName'] = $boardName;
+        $data['boardId'] = $boardId;
 
         $view = $this->view->render('backend/boards/single_board', $data);
 
@@ -72,10 +83,12 @@ class BoardController extends Controller
      *
      * @return string
      */
-    public function edit(int $id): string
+    public function edit(int $boardId): string
     {
+        $this->checkBoardAccess($boardId);
+
         if ($this->isValid()) {
-            return $this->json($this->load->dao('Board')->update($id));
+            return $this->json($this->load->dao('Board')->update($boardId));
         }
 
         return $this->json(['errors' => $this->validator->detachMessages()]);
@@ -88,16 +101,18 @@ class BoardController extends Controller
      *
      * @return string
      */
-    public function delete(int $id): string
+    public function delete(int $boardId): string
     {
+        $this->checkBoardAccess($boardId);
+
         $boards = $this->load->dao('Board');
 
-        if($boards->exists($id)) {
-            $boards->delete($id);
+        if($boards->exists($boardId)) {
+            $boards->delete($boardId);
             return $this->json(['success' => 'Deleted']);
         }
 
-        return $this->json(['errors' => 'The board with ' . $boards->get($id).' doesn\'t exists']);
+        return $this->json(['errors' => 'The board with ' . $boards->get($boardId).' doesn\'t exists']);
     }
 
     /**
@@ -107,10 +122,30 @@ class BoardController extends Controller
      */
     private function isValid(int $id = null): bool
     {
-        $this->validator->required('name', 'The name is required');
-        $this->validator->minLen('name', 3);
-        $this->validator->maxLen('name', 30);
+        $this->validator->required('name', 'The name is required')
+            ->minLen('name', 3)
+            ->maxLen('name', 30);
 
         return $this->validator->passes();
+    }
+
+    /**
+     * @param int $boardId
+     */
+    private function checkBoardAccess(int $boardId): void
+    {
+        $board = $this->load->dao('Board')->get($boardId);
+
+        if (!$board) {
+            $this->url->redirectTo('/404');
+        }
+
+        if($this->user->getUserRoleId() === User::ROLE_ADMIN){
+            return;
+        }
+
+        if ($board->getUserId() !== $this->user->getId()) {
+            $this->url->redirectTo('/403');
+        }
     }
 }

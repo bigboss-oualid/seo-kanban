@@ -6,11 +6,12 @@ var DOM = {
     boardInput: '.board-input',
     inputErrorMsg: '.input-error-msg',
     boardsList: '.boards-list',
-    userID: '.user-id'
+    emptyListMessage: '.empty-list'
 };
 
 
 var boardsList = document.querySelector(DOM.boardsList);
+
 boardsList.addEventListener('click', function(e) {
     if (e.target.classList.contains('board-edit')) {
         editBoard(e);
@@ -30,17 +31,11 @@ boardAddbtn.addEventListener('click', function(e) {
     var boardInput = document.querySelector(DOM.boardInput);
     var inputErrorMsg = document.querySelector(DOM.inputErrorMsg);
 
-    if (isEmpty(boardInput)) {
-        var msg = "No input";
-        displayErrMsg(msg, inputErrorMsg, boardInput);
-        return;
-    }
     removeErrMsg(inputErrorMsg, boardInput);
 
-    var userID = document.querySelector(DOM.userID).value;
     var boardName = boardInput.value;
 
-    ajaxAdd({name:boardName, user_id:userID}, g.boardsModel)
+    ajaxAdd({name:boardName}, g.boardsModel)
         .then(function(data) {
             var boardID = data.lastInsertID;
 
@@ -62,9 +57,11 @@ boardAddbtn.addEventListener('click', function(e) {
                     </div>
                 </div>
             `;
-
             var boardsList = document.querySelector(DOM.boardsList);
             boardsList.insertAdjacentHTML('beforeend', html);
+            let elementBoardsList = document.getElementsByClassName('board-container');
+            let emptyListMessage = document.getElementById('empty-list');
+            toggleAlertMessage(elementBoardsList, emptyListMessage);
         })
         .catch(function(error) {
             displayErrMsg(error.errors, inputErrorMsg, boardInput);
@@ -78,15 +75,15 @@ boardAddbtn.addEventListener('click', function(e) {
 boardUpdatebtn.addEventListener('click', function(e) {
     var boardInput = document.querySelector(DOM.boardInput);
     var inputErrorMsg = document.querySelector(DOM.inputErrorMsg);
-    var boardAddbtn = document.querySelector(DOM.boardAddbtn);
-    var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
-    var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
+    //var boardAddbtn = document.querySelector(DOM.boardAddbtn);
+    //var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
+    //var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
 
-    if (isEmpty(boardInput)) {
+    /*if (isEmpty(boardInput)) {
         var msg = "No input";
         displayErrMsg(msg, inputErrorMsg, boardInput);
         return;
-    }
+    }*/
     removeErrMsg(inputErrorMsg, boardInput);
 
 
@@ -116,9 +113,9 @@ boardUpdatebtn.addEventListener('click', function(e) {
 boardCancelbtn.addEventListener('click', function(e) {
     var boardInput = document.querySelector(DOM.boardInput);
     var inputErrorMsg = document.querySelector(DOM.inputErrorMsg);
-    var boardAddbtn = document.querySelector(DOM.boardAddbtn);
-    var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
-    var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
+    //var boardAddbtn = document.querySelector(DOM.boardAddbtn);
+    //var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
+    //var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
 
     removeErrMsg(inputErrorMsg, boardInput);
 
@@ -139,9 +136,9 @@ function editBoard(e) {
 
     var boardInput = document.querySelector(DOM.boardInput);
     var inputErrorMsg = document.querySelector(DOM.inputErrorMsg);
-    var boardAddbtn = document.querySelector(DOM.boardAddbtn);
-    var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
-    var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
+    //var boardAddbtn = document.querySelector(DOM.boardAddbtn);
+    //var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
+    //var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
     var boardName = document.querySelector(`#board-name--${boardID}`);
 
     removeErrMsg(inputErrorMsg, boardInput);
@@ -164,13 +161,14 @@ function deleteBoard(e) {
 
     var boardInput = document.querySelector(DOM.boardInput);
     var inputErrorMsg = document.querySelector(DOM.inputErrorMsg);
-    var boardAddbtn = document.querySelector(DOM.boardAddbtn);
-    var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
-    var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
+    //var boardAddbtn = document.querySelector(DOM.boardAddbtn);
+    //var boardUpdatebtn = document.querySelector(DOM.boardUpdatebtn);
+    //var boardCancelbtn = document.querySelector(DOM.boardCancelbtn);
 
     var conf = confirm("Are you sure?");
     if (conf === true) {
         ajaxDelete({id:boardID}, g.boardsModel);
+
         if (boardAddbtn.classList.contains('hide')) {
             boardUpdatebtn.dataset.boardid = "";
             boardInput.value = "";
@@ -205,6 +203,15 @@ function removeErrMsg(errorTextField, inputField) {
 function isEmpty(field) {
     if (field.value == "") return true;
     return false;
+}
+
+function toggleAlertMessage(elements, Message) {
+    console.log(elements.length)
+    if (elements.length >0) {
+        Message.classList.add('hide');
+    } else {
+        Message.classList.remove('hide');
+    }
 }
 
 function getIdFromElement(elementID) {

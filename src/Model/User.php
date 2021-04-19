@@ -17,8 +17,10 @@ use System\UserInterface;
 
 class User extends Model implements UserInterface
 {
+    const ROLE_ADMIN = 1;
+    const ROLE_SUPERUSER = 2;
     private int $id;
-    private int $userRoleId;
+    private int $userRoleId = self::ROLE_SUPERUSER;
     private string $username;
     private string $password;
     private string $code;

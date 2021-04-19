@@ -30,9 +30,7 @@ class LoginController extends Controller
             return $this->url->redirectTo('/');
         }
 
-        $errors['message'] = $this->validator->detachMessages();
-
-        $view = $this->view->render('backend/account/login', $errors);
+        $view = $this->view->render('backend/account/login');
 
         return $this->backendLayout->render($view);
     }
@@ -42,7 +40,7 @@ class LoginController extends Controller
      *
      * @return mixed
      */
-    public function submit()
+    public function submit():string
     {
         if ($this->isValid()) {
             $loginDao = $this->load->dao('Login');
@@ -55,9 +53,9 @@ class LoginController extends Controller
                 // Save login data in SESSION
                 $this->session->set('login', $loggedInUser->getCode());
 
-            $this->url->redirectTo('/');
+            return $this->json(['result' => "Welcome {$loggedInUser->getUsername()}", 'redirectTo' => urlHtml('/')]);
         } else {
-            $this->index();
+            return $this->json(['errors' => $this->validator->getMessages()]);
         }
     }
 

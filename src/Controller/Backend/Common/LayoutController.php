@@ -63,6 +63,6 @@ class LayoutController extends Controller
      */
     public function setTitle(string $title): void
     {
-        $this->html->setTitle($title . ' | Kanban');
+        $this->html->setTitle($title);
     }
 }

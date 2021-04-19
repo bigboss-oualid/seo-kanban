@@ -13,10 +13,6 @@ var submitBtn = document.querySelector(DOM.registerBtn);
 submitBtn.addEventListener('click', function(e) {
 
     e.preventDefault();
-    var Inputs= {
-        'username' : '#username',
-        'password' : '#password',
-    } ;
     var usernameInput = document.querySelector(DOM.usernameInput);
     var passwordInput = document.querySelector(DOM.passwordInput);
     var inputErrorUsername = document.querySelector(DOM.inputErrorMsg+'username');
@@ -29,7 +25,7 @@ submitBtn.addEventListener('click', function(e) {
     var password = document.querySelector(DOM.passwordInput).value;
     var confirmPass = document.querySelector(DOM.confirmPassInput).value;
 
-    ajaxCreate({username:username, password:password, confirm_password:confirmPass}, g.registerModel)
+    ajaxSubmit({username:username, password:password, confirm_password:confirmPass}, g.registerModel)
         .then(function(data) {
             window.location.href = data.redirectTo
         })

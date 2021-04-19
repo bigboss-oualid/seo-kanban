@@ -104,7 +104,7 @@ if (! function_exists('seo')) {
         // remove any white spaces from the beginning & the end of the given string
         $string = trim($string);
 
-        // replace any non alphabe or numeric characters and dashes with white space
+        // replace any non alphabet or numeric characters and dashes with white space
         $string = preg_replace('#[^\w]#', ' ' , $string);
 
         // replace any multi white spaces with just one white space

@@ -139,6 +139,10 @@ abstract class DAO
 
         if (!$result){ return null;}
 
+        if( !$this->getModelClass()){
+            return $result;
+        }
+
         $model = $this->getModelClass();
 
         return new $model($result);
@@ -147,12 +151,18 @@ abstract class DAO
     /**
      * Create Model name to create new instance
      *
-     * @return string
+     * @return null|string
      */
-    private function getModelClass(): string
+    private function getModelClass(): ?string
     {
         $modelName = ucfirst($this->table);
         $modelPath = 'App\\Model\\'.$modelName;
+
+        $relativeViewPath = 'src/Model/'.$modelName.'.php';
+
+        if(!$this->file->exists($relativeViewPath)){
+            return null;
+        }
 
         str_replace('/', '\\', $modelPath);
 

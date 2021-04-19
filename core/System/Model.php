@@ -11,15 +11,16 @@
 
 namespace System;
 
-
 Abstract class Model
 {
-    public function __construct(array $data)
+    public function __construct(array $data = [])
     {
-        $this->hydrate($data);
+        if(!empty($data)){
+            $this->hydrate($data);
+        }
     }
 
-    private function hydrate(array $data): void
+    protected function hydrate(array $data): void
     {
         foreach ($data as $key => $value) {
             $method = 'set'.str_replace('_','',ucwords($key,'_'));

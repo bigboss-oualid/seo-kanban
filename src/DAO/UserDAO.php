@@ -12,6 +12,7 @@
 namespace App\DAO;
 
 
+use App\Model\User;
 use System\DAO;
 
 class UserDAO extends DAO
@@ -24,15 +25,15 @@ class UserDAO extends DAO
      */
     public function create(): array
     {
-        $userRoleId = ucfirst($this->request->post('user_role_id'));
+        //$userRoleId = ucfirst($this->request->post('user_role_id'));
         $username   = ucfirst($this->request->post('username'));
         $password   = ucfirst($this->request->post('password'));
 
-        if (!$userRoleId) {
-            $userRoleId = '3';
-        }
+       /* if (!$userRoleId) {
+            $userRoleId = User::ROLE_ADMIN;
+        }*/
 
-        $result = $this->data('user_role_id', $userRoleId)
+        $result = $this->data('user_role_id', User::ROLE_SUPERUSER)
             ->data('username', $username)
             ->data('password', password_hash($password, PASSWORD_DEFAULT))
             ->data('code', sha1(time() . mt_rand()))

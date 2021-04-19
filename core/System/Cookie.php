@@ -27,7 +27,7 @@ class Cookie
      */
     private string $path = '/';
 
-     /**
+    /**
      * Constructor
      *
      * @param Application $app
@@ -37,8 +37,8 @@ class Cookie
         $this->app = $app;
 
         /**
-         *Get the path through the variable SCRIPT_NAME from $_SERVER, 
-         *Remove the file 'index.php' from path to get only the directory of the script name
+         * Get the path through the variable SCRIPT_NAME from $_SERVER,
+         * Remove the file 'index.php' from path to get only the directory of the script name
          */
         $this->path = dirname($this->app->request->server('SCRIPT_NAME')) ?: '/';
     }

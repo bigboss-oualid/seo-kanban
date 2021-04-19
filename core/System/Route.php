@@ -157,9 +157,8 @@ class Route
     /**
      * Call All callbacks that will be called before calling the main controller
      *
-     * @return bool
      */
-    public function callFirstCalls(): bool
+    public function callFirstCalls()
     {
         foreach ($this->calls['first'] as $callback) {
             call_user_func($callback, $this->app);

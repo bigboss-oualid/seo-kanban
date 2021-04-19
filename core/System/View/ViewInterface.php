@@ -21,8 +21,7 @@ interface ViewInterface
     public function getOutput(): string;
 
     /**
-     * convert the "System\View\View" object to string in printing
-     * i.e echo $object
+     * convert the "System\View\View" object to string in printing i.e echo $object
      *
      * @return
      */
