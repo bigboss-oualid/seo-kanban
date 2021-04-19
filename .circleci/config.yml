@@ -11,9 +11,9 @@ jobs:
       - run:
           name: "Install apt"
           command: sudo apt update && sudo apt-get install -y rsync xsltproc
-      #- add_ssh_keys:
-          #fingerprints:
-            #- "81:b5:40:3b:41:b2:df:e4:d5:4e:6f:d3:46:a3:16:ec"
+      - add_ssh_keys:
+          fingerprints:
+            - "f9:e7:24:b6:d5:7d:0c:8a:05:61:6a:f7:43:c1:96:72"
       - run:
           name: "Create Environment file"
           command: mv .env.test .env
@@ -42,7 +42,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "cc:40:d3:e9:f2:56:ec:40:7a:9d:7e:7f:c6:7c:dc:d9"
+            - "f9:e7:24:b6:d5:7d:0c:8a:05:61:6a:f7:43:c1:96:72"
       - run:
           name:  "Install apt"
           command: sudo apt update && sudo apt-get install -y rsync
