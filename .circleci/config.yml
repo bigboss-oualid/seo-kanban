@@ -48,23 +48,17 @@ jobs:
           name:  "Install apt"
           command: sudo apt update && sudo apt-get install -y rsync
 
-      #- run:
-          #name: "Update Environment file for production"
-          #command: |
-            #> .env
-            #echo APP_ENV=${APP_ENV} >> .env
-            #echo APP_SECRET=${APP_SECRET} >> .env
-            #echo DATABASE_URL=${DATABASE_URL} >> .env
+      - run:
+          name: "Update Database connexion"
+          command: |
+            rm ./config/db_connection.php
+            > ./config/db_connection.php
+            echo APP_ENV=${DB_CONNECTION} >> ./config/db_connection.php
       - run:
           name: "Install Composer Dependencies"
           command: |
             sudo composer self-update --2
             composer install
-      #- run:
-          #name: "Clear Cache"
-          #command: |
-            #php bin/console cache:clear --env=prod --no-interaction
-            #php bin/console cache:warmup --env=prod --no-interaction
 
       - run:
           name: "Add Production host to VM"
@@ -90,7 +84,7 @@ jobs:
             git config --global user.email "oualid.boulatar@gmail.com"
             git config --global user.name "bigboss-oualid"
             git checkout production || git checkout -b production
-            git merge continuous_deploy
+            git merge ci/cd
             git add .
             git commit -m "ci/cd: deployment is successfully completed"
             git push origin production -f
