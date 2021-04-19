@@ -53,7 +53,7 @@ jobs:
           command: |
             rm ./config/db_connection.php
             > ./config/db_connection.php
-            echo APP_ENV=${DB_CONNECTION} >> ./config/db_connection.php
+            echo ${DB_CONNECTION} >> ./config/db_connection.php
       - run:
           name: "Install Composer Dependencies"
           command: |
@@ -73,7 +73,7 @@ jobs:
             ssh -t $SERVER_USER@$PRODUCTION_SERVER_IP < config/deploy/pre_deploy.sh
       - run:
           name: "Deploy code"
-          command: rsync -vzcrSLhp --exclude '.circleci' --exclude '.git' --exclude '.phpunit.result.cache' --exclude '*test*' --delete ~/kanban/ $SERVER_USER@$PRODUCTION_SERVER_IP:$PRODUCTION_SERVER_PATH/current
+          command: rsync -vzcrSLhp --exclude '.circleci' --exclude '.phpunit.result.cache' --exclude '*test*' --delete ~/kanban/ $SERVER_USER@$PRODUCTION_SERVER_IP:$PRODUCTION_SERVER_PATH/current
       - run:
           name: "Post Deploy"
           command:
