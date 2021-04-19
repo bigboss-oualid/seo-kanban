@@ -9,7 +9,7 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Backend;
+namespace App\Controller\Frontend;
 
 use System\Controller;
 
@@ -22,16 +22,16 @@ class RegisterController extends Controller
      */
     public function index()
     {
-        $this->backendLayout->setTitle('Sign in');
+        $this->frontendLayout->setTitle('Sign up');
         $loginDAO = $this->load->dao('Login');
 
         if (isset($loginDAO) && $loginDAO->isLogged()) {
             return $this->url->redirectTo('/');
         }
 
-        $view = $this->view->render('backend/account/register');
+        $view = $this->view->render('frontend/account/register');
 
-        return $this->backendLayout->render($view);
+        return $this->frontendLayout->render($view);
     }
 
     /**
@@ -58,7 +58,7 @@ class RegisterController extends Controller
      */
     private function isValid()
     {
-        $this->validator->required('username')->minLen('username', 3)->unique('username', ['user', 'username']);;
+        $this->validator->required('username')->minLen('username', 3)->unique('username', ['user', 'username']);
         $this->validator->required('password')->password('password')->match('password', 'confirm_password');
 
         return $this->validator->passes();

@@ -9,7 +9,7 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-namespace App\Controller\Backend;
+namespace App\Controller\Frontend;
 
 use System\Controller;
 
@@ -22,7 +22,7 @@ class LoginController extends Controller
      */
     public function index()
     {
-        $this->backendLayout->setTitle('Login');
+        $this->frontendLayout->setTitle('Sign in');
 
         $loginDAO = $this->load->dao('Login');
 
@@ -30,9 +30,9 @@ class LoginController extends Controller
             return $this->url->redirectTo('/');
         }
 
-        $view = $this->view->render('backend/account/login');
+        $view = $this->view->render('frontend/account/login');
 
-        return $this->backendLayout->render($view);
+        return $this->frontendLayout->render($view);
     }
 
     /**
@@ -46,17 +46,18 @@ class LoginController extends Controller
             $loginDao = $this->load->dao('Login');
 
             $loggedInUser = $loginDao->user();
-
-            ($this->request->post('remember_me')) ?
+            if($this->request->post('rememberMe')=== 'true'){
                 // Save login data in COOKIE
-                $this->cookie->set('login', $loggedInUser->getCode()) :
+                $this->cookie->set('login', $loggedInUser->getCode());
+            } else {
                 // Save login data in SESSION
                 $this->session->set('login', $loggedInUser->getCode());
+            }
 
             return $this->json(['result' => "Welcome {$loggedInUser->getUsername()}", 'redirectTo' => urlHtml('/')]);
-        } else {
-            return $this->json(['errors' => $this->validator->getMessages()]);
         }
+
+        return $this->json(['errors' => $this->validator->getMessages()]);
     }
 
     /**

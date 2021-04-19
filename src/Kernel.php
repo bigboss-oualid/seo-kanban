@@ -9,24 +9,38 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
-//White list Routes
 use System\Application;
 
 $app =  Application::getInstance();
 
-
+// Share user if is logged
 $app->share('user', function ($app) {
     $loginDao = $app->load->dao('Login');
-
     $loginDao->isLogged();
-    $user = $loginDao->user();
 
-    return $user;
+    return $loginDao->user();
 });
 
-$app->share('backendLayout', function ($app) {
-    return $app->load->controller('Backend/Common/Layout');
+$user = $app->user;
+
+// if user logged make backend free to be used
+if(isset($user)){
+    // TODO: make road access more stringent
+    /*if (strpos($app->request->url(), '/boards') === 0) {
+        //Call middlewares
+        $app->route->callFirst(function ($app) {
+            $app->load->action('backend/Access', 'index');
+        });
+    }*/
+    $app->share('backendLayout', function ($app) {
+        return $app->load->controller('backend/Common/Layout');
+    });
+}
+
+$app->share('frontendLayout', function ($app) {
+    return $app->load->controller('frontend/Common/Layout');
 });
+
 
 $routes = $parameter = $app->file->call('config/routes.php');
 
