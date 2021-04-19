@@ -70,7 +70,7 @@ jobs:
             #Save server-path env. variable in new file & export to to server
             echo PRODUCTION_SERVER_PATH=$PRODUCTION_SERVER_PATH > ~/.server-path.txt && chmod -R 700 ~/.server-path.txt
             rsync -vzcSLhp ~/.server-path.txt $SERVER_USER@$PRODUCTION_SERVER_IP:~/
-            ssh -t $SERVER_USER@$PRODUCTION_SERVER_IP < bin/deploy/pre_deploy.sh
+            ssh -t $SERVER_USER@$PRODUCTION_SERVER_IP < config/deploy/pre_deploy.sh
       - run:
           name: "Deploy code"
           command: rsync -vzcrSLhp --exclude '.circleci' --exclude '.git' --exclude '.phpunit.result.cache' --exclude '*test*' --delete ~/kanban/ $SERVER_USER@$PRODUCTION_SERVER_IP:$PRODUCTION_SERVER_PATH/current
