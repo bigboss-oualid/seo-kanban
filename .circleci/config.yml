@@ -1,58 +1,109 @@
-# PHP CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-php/ for more details
-#
+# .circleci/config.yml
 version: 2
 jobs:
-  build:
+  build_analysis_and_test:
+    environment:
+    working_directory: ~/kanban
     docker:
-      # Specify the version you desire here
-      - image: circleci/php:7.1-node-browsers
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # Using the RAM variation mitigates I/O contention
-      # for database intensive operations.
-      # - image: circleci/mysql:5.7-ram
-      #
-      # - image: redis:2.8.19
-
+      - image: circleci/php:7.4.9-node-browsers
     steps:
       - checkout
+      - run:
+          name: "Install apt"
+          command: sudo apt update && sudo apt-get install -y rsync xsltproc
+      - add_ssh_keys:
+          fingerprints:
+            - "81:b5:40:3b:41:b2:df:e4:d5:4e:6f:d3:46:a3:16:ec"
+      - run:
+          name: "Create Environment file"
+          command: mv .env.test .env
 
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
-      - run: sudo docker-php-ext-install zip
-
-      # Download and cache dependencies
+      # Download and cache composer dependencies
       - restore_cache:
           keys:
-            # "composer.lock" can be used if it is committed to the repo
-            - v1-dependencies-{{ checksum "composer.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: composer install -n --prefer-dist
-
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - run:
+          name: "Install Composer Dependencies"
+          command: |
+            sudo composer self-update --2
+            composer install -n --prefer-dist
+            # Force pulling Simple PHPUnit dependencies to be able to cache them as well
+            ./vendor/bin/simple-phpunit --version
       - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
+          key: composer-v1-{{ checksum "composer.lock" }}
           paths:
             - ./vendor
-      - restore_cache:
-          keys:
-            - node-v1-{{ checksum "package.json" }}
-            - node-v1-
-      #- run: yarn install
-      #- save_cache:
-          #key: node-v1-{{ checksum "package.json" }}
-          #paths:
-            #- node_modules
+  production_deploy:
+    working_directory: ~/kanban
+    docker:
+      - image: circleci/php:7.4.9-node-browsers
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "cc:40:d3:e9:f2:56:ec:40:7a:9d:7e:7f:c6:7c:dc:d9"
+      - run:
+          name:  "Install apt"
+          command: sudo apt update && sudo apt-get install -y rsync
 
-      # prepare the database
-      - run: touch storage/testing.sqlite
-      - run: php artisan migrate --env=testing --database=sqlite_testing --force
+      #- run:
+          #name: "Update Environment file for production"
+          #command: |
+            #> .env
+            #echo APP_ENV=${APP_ENV} >> .env
+            #echo APP_SECRET=${APP_SECRET} >> .env
+            #echo DATABASE_URL=${DATABASE_URL} >> .env
+      - run:
+          name: "Install Composer Dependencies"
+          command: |
+            sudo composer self-update --2
+            composer install 
+      #- run:
+          #name: "Clear Cache"
+          #command: |
+            #php bin/console cache:clear --env=prod --no-interaction
+            #php bin/console cache:warmup --env=prod --no-interaction
 
-      # run tests with phpunit or codecept
-      #- run: ./vendor/bin/phpunit
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+      - run:
+          name: "Add Production host to VM"
+          command: ssh-keyscan -H $PRODUCTION_SERVER_IP >> ~/.ssh/known_hosts
+      # Use Zero downtime deployment (switch an old folder with the current app version before posting code)
+      #- run:
+          #name: "Pre-deploy"
+          #command: |
+            #Save server-path env. variable in new file & export to to server
+            #echo PRODUCTION_SERVER_PATH=$PRODUCTION_SERVER_PATH > ~/.server-path.txt && chmod -R 700 ~/.server-path.txt
+            #rsync -vzcSLhp ~/.server-path.txt $SERVER_USER@$PRODUCTION_SERVER_IP:~/
+            #ssh -t $SERVER_USER@$PRODUCTION_SERVER_IP < bin/deploy/pre_deploy.sh
+      - run:
+          name: "Deploy code"
+          command: rsync -vzcrSLhp --exclude '.circleci' --exclude '.git' --exclude '.phpunit.result.cache' --exclude '*test*' --delete ~/kanban/ $SERVER_USER@$PRODUCTION_SERVER_IP:$PRODUCTION_SERVER_PATH/current
+      - run:
+          name: "Post Deploy"
+          command:
+            ssh -t $SERVER_USER@$PRODUCTION_SERVER_IP < config/deploy/deploy.sh
+      - run:
+          name: Set up testing git repository
+          command: |
+            git config --global user.email "oualid.boulatar@gmail.com"
+            git config --global user.name "bigboss-oualid"
+            git checkout production || git checkout -b production
+            git merge continuous_deploy
+            git add .
+            git commit -m "ci/cd: deployment is successfully completed"
+            git push origin production -f
+workflows:
+  version: 2
+  deploy:
+    jobs:
+      - build_analysis_and_test:
+          filters:
+            branches:
+              only: dev
+      - production_deploy:
+          requires:
+            - build_analysis_and_test
+          filters:
+            branches:
+              only: dev

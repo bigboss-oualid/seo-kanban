@@ -10,9 +10,9 @@
  */
 
 return [
-    'server'   =>  'localhost',
-    'dbName'   =>  'seo-kanban',
-    'user'   =>  'root',
-    'pass'   =>  '',
+    'server'   =>  'mysql07.manitu.net',
+    'dbName'   =>  'db65264',
+    'user'   =>  'u65264',
+    'pass'   =>  'xsEnYDep9kAVhRnw',
 ];
 

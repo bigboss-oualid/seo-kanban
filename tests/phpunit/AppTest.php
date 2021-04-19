@@ -17,10 +17,10 @@ class AppTest extends TestCase
         $board->setName('test2');
         $this->assertSame( $board->getName(), 'test2');
     }
-    public function testApp(): void {
+    /*public function testApp(): void {
         $file = new File(dirname(__DIR__,2));
         $app =  Application::getInstance($file);
 
         //$app->run();
-    }
+    }*/
 }
