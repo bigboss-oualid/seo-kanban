@@ -24,9 +24,10 @@ class HomeController extends Controller
     {
         $this->frontendLayout->setTitle('Homepage');
         $data['titlePage'] = 'Homepage Kanban Application';
+        $data['user'] =  $user = $this->user;
 
-        $view = $this->view->render('frontend/home', $data);
+        $view = $this->view->render('Frontend/home', $data);
 
-        return $this->frontendLayout->render($view)->getOutput();
+        return $this->frontendLayout->render($view);
     }
 }

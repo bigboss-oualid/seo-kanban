@@ -112,6 +112,31 @@ class Validation
     }
 
     /**
+     * Determine if the given input is valid Password
+     *
+     * @param string $inputName
+     * @param string $customErrorMessage
+     *
+     * @return self
+     */
+    public function password(string $inputName,int $minCharacters = 8, int $maxCharacters = 50, string $customErrorMessage = null): self
+    {
+        if ($this->hasErrors($inputName)) {
+            return $this;
+        }
+
+        $inputValue = $this->value($inputName);
+        $pattern = '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z]).{'.$minCharacters.','.$maxCharacters.'}$/';
+
+        if (!preg_match($pattern, $inputValue)) {
+            $message = $customErrorMessage ?: 'Your password should have minimum 6 characters:  1 majuscule, 1 minuscule Letter, at least 1 number and 1 special character';
+            $this->addError($inputName, $message);
+        }
+
+        return $this;
+    }
+
+    /**
      * Determine if The given input should be at least the given $length
      *
      * @param string      $inputName
@@ -177,8 +202,8 @@ class Validation
         $secondInputValue = $this->value($secondInput);
 
         if ($firstInputValue != $secondInputValue) {
-            $message = $customErrorMessage ?: sprintf('%s do not match %s', ucfirst($secondInput), $firstInput);
-            $this->addError($secondInput, $message);
+            $message = $customErrorMessage ?: sprintf('You entered two different %ss !',  $firstInput);
+            $this->addError($firstInput, $message);
         }
         return $this;
     }

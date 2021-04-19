@@ -1,3 +1,4 @@
+<?php
 /*
  * Copyright (c) 2021. Boulatar Oualid - All Rights Reserved
  *  You may use, distribute and modify this code under the
@@ -8,3 +9,20 @@
  *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
  */
 
+namespace App\Controller\Backend\Common;
+
+use System\Controller;
+
+class FooterController extends Controller
+{
+    /**
+     * return footer for index page
+     *
+     *  @return string
+     */
+    public function index(): string
+    {
+        $data['user'] = $this->load->dao('Login')->user();
+        return $this->view->render('Backend/common/footer', $data);
+    }
+}

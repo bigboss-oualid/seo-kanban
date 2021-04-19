@@ -24,6 +24,9 @@ class HeaderController extends Controller
     {
         $data['title'] = $this->html->title();
 
-        return $this->view->render('frontend/common/header', $data)->getOutput();
+        $data['user'] = $this->load->dao('Login')->user();
+        //var_dump($data['user']);
+
+        return $this->view->render('Frontend/common/header', $data);
     }
 }

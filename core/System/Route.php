@@ -39,7 +39,7 @@ class Route
      *
      * @var string|null
      */
-    private ?string $notFound;
+    private ?string $notFound = '/404';
 
     /**
      *Calls Container
@@ -85,7 +85,6 @@ class Route
             'action'     => $this->getAction($action),
             'method'     => strtoupper($requestMethod),
         ];
-
         $this->routes[] = $route;
     }
 
@@ -158,9 +157,8 @@ class Route
     /**
      * Call All callbacks that will be called before calling the main controller
      *
-     * @return bool
      */
-    public function callFirstCalls(): bool
+    public function callFirstCalls()
     {
         foreach ($this->calls['first'] as $callback) {
             call_user_func($callback, $this->app);
@@ -206,6 +204,8 @@ class Route
      */
     private function isMatching(string $pattern): bool
     {
+
+        //var_dump($pattern, $this->app->request->url());die();
         return preg_match($pattern, $this->app->request->url());
     }
 

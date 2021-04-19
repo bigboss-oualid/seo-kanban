@@ -11,8 +11,6 @@
 
 namespace System;
 
-use stdClass;
-
 abstract class DAO
 {
     /**
@@ -53,7 +51,7 @@ abstract class DAO
             $parts = explode('\\', get_class($this));
             $class_name = end($parts);
 
-            $this->table = strtolower(str_replace('Model', '', $class_name));
+            $this->table = strtolower(str_replace('DAO', '', $class_name));
         }
     }
 
@@ -114,7 +112,18 @@ abstract class DAO
      */
     public function all(): array
     {
-        return $this->fetchAll($this->table);
+        $results = $this->fetchAll($this->table);
+
+        if (!$results){ return [];}
+
+        $data = [];
+        $model = $this->getModelClass();
+
+        foreach ($results as $result){
+            $data[] = new $model($result);
+        }
+
+        return $data;
     }
 
     /**
@@ -122,11 +131,42 @@ abstract class DAO
      *
      * @param  int    $id
      *
-     * @return stdClass|null
+     * @return mixed
      */
-    public function get(int $id): ?stdClass
+    public function get(int $id)
     {
-        return $this->where('id = ?', $id)->fetch($this->table);
+        $result = $this->where('id = ?', $id)->fetch($this->table);
+
+        if (!$result){ return null;}
+
+        if( !$this->getModelClass()){
+            return $result;
+        }
+
+        $model = $this->getModelClass();
+
+        return new $model($result);
+    }
+
+    /**
+     * Create Model name to create new instance
+     *
+     * @return null|string
+     */
+    private function getModelClass(): ?string
+    {
+        $modelName = ucfirst($this->table);
+        $modelPath = 'App\\Model\\'.$modelName;
+
+        $relativeViewPath = 'src/Model/'.$modelName.'.php';
+
+        if(!$this->file->exists($relativeViewPath)){
+            return null;
+        }
+
+        str_replace('/', '\\', $modelPath);
+
+        return $modelPath;
     }
 
 } 

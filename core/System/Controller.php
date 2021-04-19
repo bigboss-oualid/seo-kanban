@@ -12,7 +12,7 @@
 namespace System;
 
 abstract class Controller
-    {
+{
     /**
      * Application Object
      *

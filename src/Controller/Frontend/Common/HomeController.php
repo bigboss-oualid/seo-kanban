@@ -22,8 +22,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $view = $this->view->render('frontend/home');
+        $view = $this->view->render('home');
 
-        return $this->blogLayout->render($view);
+        return $this->frontendLayout->render($view);
     }
 }

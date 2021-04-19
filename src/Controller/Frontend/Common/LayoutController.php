@@ -37,7 +37,7 @@ class LayoutController extends Controller
         foreach ($sections as $section) {
             $data[$section] = in_array($section, $this->disabledSections) ? '' : $this->load->controller('Frontend/Common/' . ucfirst($section))->index();
         }
-        return $this->view->render('frontend/common/layout', $data);
+        return $this->view->render('Frontend/common/layout', $data);
     }
 
     /**
@@ -63,6 +63,6 @@ class LayoutController extends Controller
      */
     public function setTitle(string $title): void
     {
-        $this->html->setTitle($title . ' | Kanban');
+        $this->html->setTitle($title);
     }
 }

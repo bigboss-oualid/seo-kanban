@@ -38,12 +38,12 @@ class Database
     /**
      * Table name
      *
-     * @var string|null
+     * @var null|string
      */
-    private ?string $table;
+    private ?string $table = null;
 
     /**
-     * Data Container that eill be stored in database
+     * Data Container that will be stored in database
      *
      * @var string array
      */
@@ -177,6 +177,52 @@ class Database
         return static::$connectionDb;
     }
 
+
+    /**
+     * Fetch Table, this will return only one record
+     *
+     * @param string $table
+     *
+     * @return  array|bool
+     */
+    public function fetch(string $table = null)
+    {
+        if($table) {
+            $this->table($table);
+        }
+        $sql = $this->fetchStatement();
+        $result = $this->query($sql, $this->bindings)->fetch();
+        $this->reset();
+
+        return $result;
+    }
+
+    /**
+     * Fetch All Records from Table
+     *
+     * @param string $table
+     *
+     * @return array
+     */
+    public function fetchAll(string $table = null): array
+    {
+        if($table) {
+            $this->table($table);
+        }
+
+        $sql = $this->fetchStatement();
+
+        $query = $this->query($sql, $this->bindings);
+
+        $results = $query->fetchAll();
+
+        $this->rows = $query->rowCount();
+
+        $this->reset();
+
+        return $results;
+    }
+
     /**
      * Set the table name
      *
@@ -187,7 +233,6 @@ class Database
     public function table(string $table): self
     {
         $this->table = $table;
-
         return $this;
     }
 
@@ -304,7 +349,7 @@ class Database
             $this->table($table);
         }
 
-        $sql = 'DELETE FROM ' . $this->table . ' ';
+        $sql = 'DELETE FROM ' . $this->table . '';
 
         if ($this->wheres) {
             $sql .= self::WHERE. implode(' ', $this->wheres);
@@ -368,7 +413,7 @@ class Database
      *
      * @return self
      */
-    public function Limit(int $limit, int $offset = 0): self
+    public function limit(int $limit, int $offset = 0): self
     {
         $this->limit = $limit;
         $this->offset = $offset;
@@ -377,50 +422,54 @@ class Database
     }
 
     /**
-     * Fetch Table
-     * This will return only one record
+     * Execute the given sql statement
      *
-     * @param string $table
+     * @param mixed
      *
-     * @return stdClass | null
+     * @return mixed
      */
-    public function fetch(string $table = null): PDOStatement
+    public function query(...$bindings)
     {
-        if($table) {
-            $this->table($table);
+        $sql = array_shift($bindings);
+        //if i send bindings as one array ex:query('SELECT * FROM episodes WHERE id > ? AND id < ?', [1,5]);
+        if (count($bindings) == 1 && is_array($bindings[0])) {
+            $bindings = $bindings[0];
         }
-        $sql = $this->fetchStatement();
 
-        $result = $this->query($sql, $this->bindings)->fetch();
+        try {
+            $query = $this->connectionDb()->prepare($sql);
 
-        $this->reset();
+            foreach ($bindings as $key => $value) {
+                $query->bindValue($key + 1, _escape($value));
+            }
+            $query->execute();
 
-        return $result;
+            return $query;
+
+        } catch (PDOException $e) {
+            echo $sql;
+
+            pre($this->bindings,false);
+
+            die($e->getMessage());
+        }
     }
 
     /**
-     * Fetch All Records from Table
+     * Add the given value to bindings
      *
-     * @param string $table
+     * @param mixed $value
      *
-     * @return array
+     * @return void
      */
-    public function fetchAll(string $table = null): array
+    private function addToBindings($value): void
     {
-        if($table) {
-            $this->table($table);
+
+        if (is_array($value)) {
+            $this->bindings = array_merge($this->bindings, array_values($value));
+        } else {
+            $this->bindings[] = $value;
         }
-        $sql = $this->fetchStatement();
-
-        $query = $this->query($sql, $this->bindings);
-
-        $results = $query->fetchAll();
-
-        $this->rows = $query->rowCount();
-
-        $this->reset();
-
-        return $results;
     }
 
     /**
@@ -458,8 +507,8 @@ class Database
         }
 
         if ($this->havings) {
-             $sql .= ' HAVING ' . implode(' ', $this->havings) . ' ';
-         }
+            $sql .= ' HAVING ' . implode(' ', $this->havings) . ' ';
+        }
 
         if($this->orderBy) {
             $sql .= ' ORDER BY ' . implode(' ' , $this->orderBy);
@@ -473,9 +522,9 @@ class Database
             $sql .= ' OFFSET ' . $this->offset;
         }
 
-         if ($this->groupBy) {
-             $sql .= ' GROUP BY ' . implode(' ' , $this->groupBy);
-         }
+        if ($this->groupBy) {
+            $sql .= ' GROUP BY ' . implode(' ' , $this->groupBy);
+        }
 
         return $sql;
     }
@@ -492,6 +541,7 @@ class Database
         foreach (array_keys($this->data) as $key) {
             $sql .= '`' . $key . '` = ? , ';
         }
+
         return rtrim($sql, ', ');
     }
 
@@ -513,89 +563,36 @@ class Database
         return $this;
     }
 
-      /**
-      * Add New Having clause
-      *
-      * @return self
-      */
-     public function having(): self
-     {
-         $bindingsFunction = func_get_args();
-
-         $sql = array_shift($bindingsFunction);
-
-         $this->addToBindings($bindingsFunction);
-
-         $this->havings[] = $sql;
-
-         return $this;
-     }
-
-      /**
-      * Group By Clause
-      *
-      * @param array $arguments
-      *
-      * @return self
-      */
-     public function groupBy(...$arguments): self
-     {
-         $this->groupBy = $arguments;
-
-         return $this;
-     }
-
     /**
-     * Execute the given sql statment
+     * Add New Having clause
      *
-     * @param mixed
-     *
-     * @return PDOStatement
+     * @return self
      */
-    public function query(...$bindings):PDOStatement
+    public function having(): self
     {
-        $sql = array_shift($bindings);
+        $bindingsFunction = func_get_args();
 
-        //if i send bindings as one array ex:query('SELECT * FROM episodes WHERE id > ? AND id < ?', [1,5]);
-        if (count($bindings) == 1 && is_array($bindings[0])) {
-            $bindings = $bindings[0];
-        }
+        $sql = array_shift($bindingsFunction);
 
-        try {
-            $query = $this->connectionDb()->prepare($sql);
+        $this->addToBindings($bindingsFunction);
 
-            $query->setFetchMode(PDO::FETCH_CLASS, static::class);
+        $this->havings[] = $sql;
 
-            foreach ($bindings as $key => $value) {
-                $query->bindValue($key + 1, _escape($value));
-            }
-            $query->execute();
-
-            return $query;
-
-        } catch (PDOException $e) {
-            echo $sql;
-
-            pre($this->bindings,0);
-
-            die($e->getMessage());
-        }
+        return $this;
     }
 
     /**
-     * Add teh given value to bindings
+     * Group By Clause
      *
-     * @param mixed $value
+     * @param array $arguments
      *
-     * @return void
+     * @return self
      */
-    private function addToBindings($value): void
+    public function groupBy(...$arguments): self
     {
-        if (is_array($value)) {
-            $this->bindings = array_merge($this->bindings, array_values($value));
-        } else {
-            $this->bindings[] = $value;
-        }
+        $this->groupBy = $arguments;
+
+        return $this;
     }
 
     private function reset(): void

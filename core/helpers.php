@@ -32,8 +32,7 @@ if (!function_exists('pre')) {
 
 if(!function_exists('array_get')) {
     /**
-     * Get the value from the given array for the given key if found otherwise
-     * get the default value
+     * Get the value from the given array for the given key if found otherwise get the default value
      *
      * @param  array        $array
      * @param  string|int   $key
@@ -88,6 +87,33 @@ if(!function_exists('assets')) {
     function assets(string $path): string
     {
         return urlHtml($path);
+    }
+}
+
+if (! function_exists('seo')) {
+    /**
+     * Remove any unwanted characters from the given string
+     * and replace it with -
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    function seo(string $string): string
+    {
+        // remove any white spaces from the beginning & the end of the given string
+        $string = trim($string);
+
+        // replace any non alphabet or numeric characters and dashes with white space
+        $string = preg_replace('#[^\w]#', ' ' , $string);
+
+        // replace any multi white spaces with just one white space
+        $string = preg_replace('#[\s]+#', ' ', $string);
+
+        $string = str_replace(' ', '-', $string);
+
+        // make all letters in small case letters & trim any dashes
+        return trim(strtolower($string), '-');
     }
 }
 

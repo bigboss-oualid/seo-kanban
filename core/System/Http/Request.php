@@ -42,12 +42,14 @@ class Request
         if(strpos($requestUri, '?') !== false) {
             list($requestUri) = explode('?', $requestUri);
         }
+        //$this->url = rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
         $this->url = "/". rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
+        $this->url =preg_replace('#^/{2,}#', '/',$this->url);
         if (! $this->url) {
             $this->url = '/';
         }
 
-        $script = rtrim($script, '/');
+        //$script = rtrim($script, '/');
 
         $this->baseUrl = $this->server('REQUEST_SCHEME') . '://' . $this->server('HTTP_HOST') . $script . '/';
     }
@@ -63,7 +65,7 @@ class Request
     }
 
     /**
-     * Get value from _POST by the given parameter
+     * Get value from $_POST by the given parameter
      *
      * @param  string $parameter
      * @param  mixed  $default
@@ -72,7 +74,7 @@ class Request
      */
     public function post(string $parameter, $default = null)
     {
-        // just remove any white space if there is a value
+        // Remove any white space from inputs
         $value = array_get($_POST, $parameter, $default);
 
         if (is_array($value)) {
@@ -89,8 +91,6 @@ class Request
      *
      * @param string $key
      * @param mixed $valuet
-     *
-     * @return mixed
      */
     public function setPost(string $key, $value)
     {

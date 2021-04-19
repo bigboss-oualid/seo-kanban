@@ -69,6 +69,7 @@ class Application
         $this->request->prepareUrl();
 
         $this->file->call('src/Kernel.php');
+        //var_dump('lol');die();
 
         [$controller, $method, $arguments] = $this->route->getProperRoute();
 
@@ -184,6 +185,8 @@ class Application
         if(! $this->isSharing($key)) {
             if ($this->isCoreAlias($key)) {
                 $this->share($key, $this->createNewCoreObject($key));
+            } elseif($key === 'user') {
+                return null;
             } else {
                 die('<strong>' . $key . '</strong> not found in application Container, look the coreClasses() function for more details');
             }
