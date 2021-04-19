@@ -38,11 +38,12 @@ boardAddbtn.addEventListener('click', function(e) {
     ajaxAdd({name:boardName}, g.boardsModel)
         .then(function(data) {
             var boardID = data.lastInsertID;
+            var boardSeo = data.fields.slug;
 
             var html = `
                 <div class="board-container d-inline-flex" id="board-container--${boardID}">
                     <div class="board-link-container">
-                        <a href="${g.SROOT}boards/${data.slug}/${boardID}">
+                        <a href="${g.SROOT}board/${boardSeo}/${boardID}">
                             <h4 class="board-name" id="board-name--${boardID}">${boardName}</h4>
                         </a>
                     </div>
@@ -89,11 +90,13 @@ boardUpdatebtn.addEventListener('click', function(e) {
 
     var boardID = boardUpdatebtn.dataset.boardid;
     var boardName = document.querySelector(`#board-name--${boardID}`);
+    var boardLink = document.querySelector(`#board-link--${boardID}`);
     boardName.textContent = boardInput.value;
     console.log(`${boardID} | ${boardName} | ${boardName.textContent}`);
 
     ajaxUpdate({name:boardInput.value}, boardID, g.boardsModel)
         .then(function(data) {
+            boardLink.href = g.SROOT+ 'board/'+data.fields.slug+'/'+boardID;
         })
         .catch(function(error) {
             displayErrMsg(error.errors, inputErrorMsg, boardInput);

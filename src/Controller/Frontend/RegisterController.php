@@ -29,7 +29,7 @@ class RegisterController extends Controller
             return $this->url->redirectTo('/');
         }
 
-        $view = $this->view->render('frontend/account/register');
+        $view = $this->view->render('Frontend/account/register');
 
         return $this->frontendLayout->render($view);
     }

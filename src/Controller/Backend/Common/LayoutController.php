@@ -37,7 +37,7 @@ class LayoutController extends Controller
         foreach ($sections as $section) {
             $data[$section] = in_array($section, $this->disabledSections) ? '' : $this->load->controller('Backend/Common/' . ucfirst($section))->index();
         }
-        return $this->view->render('backend/common/layout', $data);
+        return $this->view->render('Backend/common/layout', $data);
     }
 
     /**

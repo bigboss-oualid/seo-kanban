@@ -21,7 +21,7 @@ return
         // Login/logout routes
         ['url' => '/login', 'controller' => 'Frontend/Login', 'method' => 'GET' ],
         ['url' => '/login/submit', 'controller' => 'Frontend/Login@submit', 'method' => 'POST' ],
-        ['url' => '/logout', 'controller' => 'Backend/logout', 'method' => 'GET' ],
+        ['url' => '/logout', 'controller' => 'Backend/Logout', 'method' => 'GET' ],
 
         // Boards Routes
         ['url' => '/boards', 'controller' => 'Backend/Board', 'method' => 'GET'],

@@ -33,12 +33,12 @@ if(isset($user)){
         });
     }*/
     $app->share('backendLayout', function ($app) {
-        return $app->load->controller('backend/Common/Layout');
+        return $app->load->controller('Backend/Common/Layout');
     });
 }
 
 $app->share('frontendLayout', function ($app) {
-    return $app->load->controller('frontend/Common/Layout');
+    return $app->load->controller('Frontend/Common/Layout');
 });
 
 

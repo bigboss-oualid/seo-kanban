@@ -42,13 +42,14 @@ class Request
         if(strpos($requestUri, '?') !== false) {
             list($requestUri) = explode('?', $requestUri);
         }
-        $this->url = rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
-        //$this->url = "/". rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
+        //$this->url = rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
+        $this->url = "/". rtrim( preg_replace('#^' . $script . '#', '', $requestUri), '/');
+        $this->url =preg_replace('#^/{2,}#', '/',$this->url);
         if (! $this->url) {
             $this->url = '/';
         }
 
-        $script = rtrim($script, '/');
+        //$script = rtrim($script, '/');
 
         $this->baseUrl = $this->server('REQUEST_SCHEME') . '://' . $this->server('HTTP_HOST') . $script . '/';
     }

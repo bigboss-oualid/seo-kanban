@@ -35,7 +35,7 @@ class BoardController extends Controller
         }
 
         $data['boards'] = $boards;
-        $view = $this->view->render('backend/boards/list_boards', $data);
+        $view = $this->view->render('Backend/boards/list_boards', $data);
 
         return $this->backendLayout->render($view);
     }
@@ -59,7 +59,7 @@ class BoardController extends Controller
         $data['boardName'] = $boardName;
         $data['boardId'] = $boardId;
 
-        $view = $this->view->render('backend/boards/single_board', $data);
+        $view = $this->view->render('Backend/boards/single_board', $data);
 
         return $this->backendLayout->render($view);
     }

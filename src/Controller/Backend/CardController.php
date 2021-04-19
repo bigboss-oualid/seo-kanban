@@ -38,7 +38,7 @@ class CardController extends Controller
 
         $this->html->setTitle($card->getTitle());
 
-        $view = $this->view->render('backend/cards/single_card', $data);
+        $view = $this->view->render('Backend/cards/single_card', $data);
 
         return $this->backendLayout->render($view);
     }

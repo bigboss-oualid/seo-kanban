@@ -69,6 +69,7 @@ class Application
         $this->request->prepareUrl();
 
         $this->file->call('src/Kernel.php');
+        //var_dump('lol');die();
 
         [$controller, $method, $arguments] = $this->route->getProperRoute();
 

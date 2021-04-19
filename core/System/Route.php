@@ -204,6 +204,8 @@ class Route
      */
     private function isMatching(string $pattern): bool
     {
+
+        //var_dump($pattern, $this->app->request->url());die();
         return preg_match($pattern, $this->app->request->url());
     }
 

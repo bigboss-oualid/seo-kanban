@@ -30,7 +30,7 @@ class LoginController extends Controller
             return $this->url->redirectTo('/');
         }
 
-        $view = $this->view->render('frontend/account/login');
+        $view = $this->view->render('Frontend/account/login');
 
         return $this->frontendLayout->render($view);
     }

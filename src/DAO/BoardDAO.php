@@ -62,12 +62,13 @@ class BoardDAO extends DAO
      */
     public function update(int $id): array
     {
-        $name = ucfirst($this->request->post('name'));
+        $data['name'] = ucfirst($this->request->post('name'));
+        $data['slug'] =  seo( $data['name']);
 
-        $result = $this->data('name', $name)
+        $result = $this->data('name',  $data['name'])
             ->where('id=?', $id)
             ->update($this->table);
 
-        return ['fields' => $name, 'result' => $result];
+        return ['fields' =>  $data, 'result' => $result];
     }
 }
