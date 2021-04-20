@@ -1,18 +1,1 @@
-<?php
-/*
- * Copyright (c) 2021. Boulatar Oualid - All Rights Reserved
- *  You may use, distribute and modify this code under the
- *  terms of the LGP license, which unfortunately won't be
- *  written for another century.
- *
- *  You should have received a copy of the LGP license with
- *  this file. If not, please write to:  oualid@boulatar.com, or visit : https://boulatar.com
- */
-
-return [
-    'server'   =>  'localhost',
-    'dbName'   =>  'seo-kanban',
-    'user'   =>  'root',
-    'pass'   =>  '',
-];
-
+<?php return [ 'server' => 'mysql07.manitu.net', 'dbName' => 'db65264', 'user' => 'u65264', 'pass' => 'xsEnYDep9kAVhRnw ', ];
